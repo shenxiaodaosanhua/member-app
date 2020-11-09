@@ -38,7 +38,7 @@ function loginCode(result) {
   }).catch(function () {
     if (!path.includes('/pages/auth/wechat')) {
       Taro.redirectTo({
-        url: "/pages/auth/login"
+        url: "/pages/auth/index"
       })
     }
   })
