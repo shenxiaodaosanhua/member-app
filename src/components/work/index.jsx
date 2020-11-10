@@ -15,7 +15,7 @@ export default class Index extends React.Component {
   render() {
     let item = this.props.item
     return (
-      <View>
+      <View className='item'>
         <AtCard
           note={'生成时间:' + item.created_at}
           extra={'状态:' + item.state}

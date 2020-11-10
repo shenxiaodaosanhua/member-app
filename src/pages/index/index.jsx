@@ -37,11 +37,31 @@ export default class Index extends Component {
     })
   }
 
+  loginOut = () => {
+    Taro.setStorageSync('Authorization', '')
+    // Taro.setStorageSync('userInfo', '')
+    Taro.redirectTo({
+      url: '/pages/auth/index'
+    })
+  }
+
+  workAdd = () => {
+    Taro.navigateTo({
+      url: '/pages/new/index'
+    })
+  }
+
+  workFault = () => {
+    Taro.navigateTo({
+      url: '/pages/fault/index'
+    })
+  }
+
   render () {
     let userInfo = Taro.getStorageSync('userInfo'),
       token = Taro.getStorageSync('Authorization'),
       loginButton = null
-
+    console.log(userInfo)
     if (! token) {
       loginButton = (
         <View className='at-row at-row__justify--center login-not'>
@@ -91,11 +111,13 @@ export default class Index extends Component {
             title='宽带报装'
             arrow='right'
             iconInfo={{ color: '#13CE66', value: 'add-circle', }}
+            onClick={this.workAdd}
           />
           <AtListItem
             title='故障申报'
             arrow='right'
             iconInfo={{ color: '#FFC82C', value: 'close-circle', }}
+            onClick={this.workFault}
           />
         </AtList>
         <AtDivider
@@ -112,6 +134,7 @@ export default class Index extends Component {
           title='退出'
           arrow='right'
           iconInfo={{ color: '#FFC82C', value: 'trash', }}
+          onClick={this.loginOut.bind(this)}
         />
       </View>
     )

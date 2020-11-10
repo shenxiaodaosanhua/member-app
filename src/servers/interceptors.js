@@ -11,7 +11,8 @@ const customInterceptor = (chain) => {
     if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
       return Promise.reject("请求资源不存在")
 
-    } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
+    } else if ((res.statusCode === HTTP_STATUS.BAD_GATEWAY) ||
+      (res.statusCode === HTTP_STATUS.SERVER_ERROR)) {
       return Promise.reject("服务端出现了问题")
 
     } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {

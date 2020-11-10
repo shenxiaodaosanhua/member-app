@@ -37,3 +37,8 @@ export const getWorks = () => {
 export const getWorkInfo = id => {
   return httpRequest.get('/member/work/' + id)
 }
+
+//
+export const createWork = data => {
+  return httpRequest.post('/member/work', data)
+}
