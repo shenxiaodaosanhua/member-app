@@ -25,6 +25,8 @@ const customInterceptor = (chain) => {
       pageToLogin()
       return Promise.reject("需要鉴权")
 
+    } else if (res.statusCode === HTTP_STATUS.TOO_MANY) {
+      return Promise.reject("请求过于频繁")
     } else if (
       (res.statusCode === HTTP_STATUS.SUCCESS) ||
       (res.statusCode === HTTP_STATUS.CREATED) ||

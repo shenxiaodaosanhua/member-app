@@ -3,7 +3,7 @@ import { useGlobalIconFont } from './components/iconfont/helper'
 export default {
   pages: [
     'pages/index/index',
-    'pages/auth/wechat',
+    'pages/auth/mobile',
     'pages/auth/index',
   ],
   window: {

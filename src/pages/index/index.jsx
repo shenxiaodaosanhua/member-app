@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Taro from '@tarojs/taro'
 import {
+  Button,
   View,
 } from '@tarojs/components'
 import {
@@ -13,6 +14,43 @@ import './index.less'
 
 export default class Index extends Component {
 
+  state = {
+    code: '',
+  }
+
+  onGetUserInfo = result => {
+    if (result.detail.errMsg !== 'getUserInfo:ok') {
+      Taro.showToast({
+        title: '请先授权',
+        icon: 'none',
+        duration: 3000,
+      })
+      return
+    }
+
+    let userInfo = result.detail.userInfo
+    Taro.setStorageSync('userInfo', userInfo)
+    Taro.navigateTo({
+      url: '/pages/auth/index'
+    })
+  }
+
+  getCode() {
+    Taro.login().then(result => {
+      if (! result.code) {
+        Taro.showToast({
+          title: '获取登录信息失败',
+          icon: 'none',
+          duration: 3000,
+        })
+        return
+      }
+
+      this.setState({
+        code: result.code
+      })
+    })
+  }
 
   render () {
     let userInfo = Taro.getStorageSync('userInfo')
@@ -29,6 +67,19 @@ export default class Index extends Component {
             />
           </View>
         </View>
+        <View className='at-row at-row__justify--center login-not'>
+          <View
+            className='at-col-5'
+          >
+            <Button
+              className='login-not-button'
+              openType='getUserInfo'
+              onGetUserInfo={this.onGetUserInfo}
+              lang='zh_CN'
+            >未登录</Button>
+          </View>
+        </View>
+
         <AtDivider
           content='操作'
           lineColor='#cccccc'

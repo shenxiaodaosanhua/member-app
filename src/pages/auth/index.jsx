@@ -1,134 +1,122 @@
-import React from "react"
+import React from "react";
 import Taro from "@tarojs/taro"
-import {Button, Form, Input, View} from "@tarojs/components"
-import {AtDivider} from "taro-ui"
+import {Button, Text, View} from "@tarojs/components";
+import {AtAvatar, AtDivider} from "taro-ui";
 import './index.less'
-import IconFont from "../../components/iconfont";
-import {
-  getToken,
-  login,
-} from '../../servers/servers'
+import {loginWechat} from "../../servers/servers";
 
-export default class Login extends React.Component {
+export default class Index extends React.Component {
 
-  onSubmit = (e) => {
-    let username = e.detail.value.username,
-      code = e.detail.value.code
-
-    if (! username) {
-      Taro.showToast({
-        title: '请输入手机号码',
-        icon: 'none',
-        duration: 3000,
-      })
-      return
-    }
-    if (! code) {
-      Taro.showToast({
-        title: '请输入验证吗',
-        icon: 'none',
-        duration: 3000,
-      })
-      return
-    }
-
-    this.loginMember(username, code)
+  state = {
+    code: '',
   }
 
-  loginMember(username, code) {
+  componentDidMount () {
+    this.getCode()
+  }
+
+  getCode() {
+    Taro.login().then(res => {
+      if (! res.code) {
+        Taro.showToast({
+          title: '获取code失败',
+          icon: 'none',
+          duration: 3000,
+        })
+        return
+      }
+      this.setState({
+        code: res.code
+      })
+    }).catch(() => {
+      Taro.showToast({
+        title: '获取code失败',
+        icon: 'none',
+        duration: 3000,
+      })
+    })
+  }
+
+  onGetPhoneNumber = result => {
+    let data = {
+      encryptedData: result.detail.encryptedData,
+      iv: result.detail.iv,
+      code: this.state.code
+    }
+
     Taro.showLoading({
       title: '登录中...'
     })
-    login({
-      username,
-      code,
-    }).then(result => {
-      Taro.setStorageSync('Authorization', result.data.token)
-      Taro.hideLoading()
-      Taro.redirectTo({
-        url: '/pages/index/index',
-      })
-    }).catch(error => {
-      Taro.hideLoading()
-      Taro.showToast({
-        title: error.data.message,
-        icon: 'none',
-        duration: 3000,
-      })
-    })
-  }
-
-  onWechat = () => {
-    Taro.showLoading({
-      title: '登录中...'
-    })
-
-    Taro.login({
-      success: this.loginWechat
-    })
-  }
-
-  loginWechat = (result) => {
-    getToken({
-      code: result.code
-    }).then(res => {
+    loginWechat(data).then(res => {
       Taro.setStorageSync('Authorization', res.data.token)
       Taro.hideLoading()
       Taro.redirectTo({
         url: '/pages/index/index',
       })
     }).catch(error => {
+      this.getCode()
       Taro.hideLoading()
-      Taro.showToast({
-        title: error.data.message,
-        icon: 'none',
-        duration: 3000,
-      })
+      console.log(error)
+    })
+  }
+
+  loginMobile = () => {
+    Taro.navigateTo({
+      url: '/pages/auth/mobile'
     })
   }
 
   render() {
+    let userInfo = Taro.getStorageSync('userInfo')
+
     return (
-      <View
-        className='warp'
-      >
-        <Form
-          className='form'
-          onSubmit={this.onSubmit}
-        >
-          <Input
-            name='username'
-            type='number'
-            placeholder='请输入手机号码'
-            className='input'
-          />
-          <View className='at-row'>
-            <Input
-              name='code'
-              type='number'
-              placeholder='请输入验证码'
-              className='at-col at-col-8 input'
-            />
-            <View className='at-col at-col-4'>
-              <Button className='code'>获取验证码</Button>
+      <View className='warp'>
+        <View className='login-warp'>
+          <View className='at-row at-row__justify--center'>
+
+            <View
+              className='at-col-2'
+            >
+              <AtAvatar
+                image={userInfo.avatarUrl}
+                circle
+                size='large'
+              />
+            </View>
+          </View>
+          <View className='at-row at-row__justify--center'>
+
+            <View
+              className='at-col-12'
+            >
+              <Text className='text'>关联手机号码；操作更便捷</Text>
+            </View>
+          </View>
+          <View className='at-row at-row__justify--center login-not'>
+            <View
+              className='at-col-5'
+            >
+              <Button
+                className='login-mobile'
+                lang='zh_CN'
+                onClick={this.loginMobile}
+              >输入手机号码登录</Button>
+            </View>
+          </View>
+          <AtDivider />
+          <View className='at-row at-row__justify--center'>
+            <View
+              className='at-col-5'
+            >
+              <Button
+                className='login-wechat'
+                lang='zh_CN'
+                openType='getPhoneNumber'
+                onGetPhoneNumber={this.onGetPhoneNumber}
+              >微信快速登录</Button>
             </View>
           </View>
 
-          <Button
-            type='primary'
-            formType='submit'
-            className='button'
-          >登录</Button>
-        </Form>
-        <AtDivider content='第三方登录' />
-        <View
-          className='at-row at-row__justify--center'
-        >
-          <View
-            className='at-col at-col-2'
-          >
-            <IconFont name='weixin' size={80} />
-          </View>
         </View>
       </View>
     )
