@@ -14,10 +14,6 @@ import './index.less'
 
 export default class Index extends Component {
 
-  state = {
-    code: '',
-  }
-
   onGetUserInfo = result => {
     if (result.detail.errMsg !== 'getUserInfo:ok') {
       Taro.showToast({
@@ -35,25 +31,34 @@ export default class Index extends Component {
     })
   }
 
-  getCode() {
-    Taro.login().then(result => {
-      if (! result.code) {
-        Taro.showToast({
-          title: '获取登录信息失败',
-          icon: 'none',
-          duration: 3000,
-        })
-        return
-      }
-
-      this.setState({
-        code: result.code
-      })
+  selectWork = () => {
+    Taro.navigateTo({
+      url: '/pages/works/index'
     })
   }
 
   render () {
-    let userInfo = Taro.getStorageSync('userInfo')
+    let userInfo = Taro.getStorageSync('userInfo'),
+      token = Taro.getStorageSync('Authorization'),
+      loginButton = null
+
+    if (! token) {
+      loginButton = (
+        <View className='at-row at-row__justify--center login-not'>
+          <View
+            className='at-col-5'
+          >
+            <Button
+              className='login-not-button'
+              openType='getUserInfo'
+              onGetUserInfo={this.onGetUserInfo}
+              lang='zh_CN'
+            >未登录</Button>
+          </View>
+        </View>
+      )
+    }
+
     return (
       <View>
         <View className='at-row at-row__justify--center'>
@@ -67,18 +72,8 @@ export default class Index extends Component {
             />
           </View>
         </View>
-        <View className='at-row at-row__justify--center login-not'>
-          <View
-            className='at-col-5'
-          >
-            <Button
-              className='login-not-button'
-              openType='getUserInfo'
-              onGetUserInfo={this.onGetUserInfo}
-              lang='zh_CN'
-            >未登录</Button>
-          </View>
-        </View>
+
+        {loginButton}
 
         <AtDivider
           content='操作'
@@ -90,6 +85,7 @@ export default class Index extends Component {
             title='查询进度'
             arrow='right'
             iconInfo={{ color: '#13CE66', value: 'eye', }}
+            onClick={this.selectWork}
           />
           <AtListItem
             title='宽带报装'

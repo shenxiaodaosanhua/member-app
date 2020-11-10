@@ -5,6 +5,8 @@ export default {
     'pages/index/index',
     'pages/auth/mobile',
     'pages/auth/index',
+    'pages/works/index',
+    'pages/info/index',
   ],
   window: {
     backgroundTextStyle: 'light',

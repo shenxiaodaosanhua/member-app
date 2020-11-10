@@ -27,3 +27,13 @@ export const sendMobileCode = (data) => {
 export const loginCode = (data) => {
   return httpRequest.post('/oauth/member/login-code', data);
 }
+
+//我的工单列表
+export const getWorks = () => {
+  return httpRequest.get('/member/work')
+}
+
+//工单详情
+export const getWorkInfo = id => {
+  return httpRequest.get('/member/work/' + id)
+}
