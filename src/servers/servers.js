@@ -38,7 +38,12 @@ export const getWorkInfo = id => {
   return httpRequest.get('/member/work/' + id)
 }
 
-//
+//创建工单
 export const createWork = data => {
   return httpRequest.post('/member/work', data)
+}
+
+//获取我的信息
+export const getMy = () => {
+  return httpRequest.get('/member')
 }

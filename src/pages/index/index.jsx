@@ -11,8 +11,27 @@ import {
   AtListItem,
 } from 'taro-ui'
 import './index.less'
+import {getMy} from "../../servers/servers";
 
 export default class Index extends Component {
+
+  state = {
+    user: null,
+  }
+
+  componentDidMount () {
+    getMy().then(result => {
+      this.setState({
+        user: result.data
+      })
+    }).catch(error => {
+      Taro.showToast({
+        title: error.data.message,
+        icon: 'none',
+        duration: 3000,
+      })
+    })
+  }
 
   onGetUserInfo = result => {
     if (result.detail.errMsg !== 'getUserInfo:ok') {
@@ -61,7 +80,7 @@ export default class Index extends Component {
     let userInfo = Taro.getStorageSync('userInfo'),
       token = Taro.getStorageSync('Authorization'),
       loginButton = null
-    console.log(userInfo)
+
     if (! token) {
       loginButton = (
         <View className='at-row at-row__justify--center login-not'>
@@ -125,11 +144,21 @@ export default class Index extends Component {
           lineColor='#cccccc'
           fontColor='#cccccc'
         />
-        <AtListItem
-          title='绑定小程序'
-          arrow='right'
-          iconInfo={{ color: '#13CE66', value: 'message', }}
-        />
+        {
+          this.state.user && this.state.user.is_bind ? (
+            <AtListItem
+              title='绑定小程序'
+              extraText='已绑定'
+              iconInfo={{ color: '#13CE66', value: 'message', }}
+            />
+          ) : (
+            <AtListItem
+              title='绑定小程序'
+              arrow='right'
+              iconInfo={{ color: '#13CE66', value: 'message', }}
+            />
+          )
+        }
         <AtListItem
           title='退出'
           arrow='right'
