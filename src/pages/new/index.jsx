@@ -1,24 +1,39 @@
 import React, { Component } from 'react'
 import Taro from '@tarojs/taro';
-import {Button, Form, Input, Text, Textarea, View} from "@tarojs/components";
+import {Button, Form, Input, OfficialAccount, Text, Textarea, View} from "@tarojs/components";
 import './index.less'
 import {createWork} from "../../servers/servers";
+import {getCurrentInstance} from "@tarojs/runtime";
 
 export default class Index extends React.Component {
 
   state = {
-    isSubmit: false
+    isSubmit: false,
+  }
+
+  componentDidMount () {
+    let params = getCurrentInstance().router.params
+    if ((params.user_id) && (params.user_id > 0)) {
+      Taro.setStorageSync('user_id', params.user_id);
+    }
   }
 
   onSubmit = form => {
     Taro.showLoading({
       title: '提交中...'
     })
+
+    let userId = getCurrentInstance().router.params.user_id
+    if (! userId) {
+      userId = Taro.getStorageSync('user_id')
+    }
+
     let data = {
       name: form.detail.value.name,
       mobile: form.detail.value.mobile,
       remark: form.detail.value.remark,
       category: 'new',
+      'user_id': userId,
     }
 
     createWork(data).then(() => {
@@ -34,6 +49,14 @@ export default class Index extends React.Component {
         duration: 3000,
       })
     })
+  }
+
+  onLoad = result => {
+    console.log(result)
+  }
+
+  onError = result => {
+    console.log(result)
   }
 
   render() {
@@ -76,6 +99,7 @@ export default class Index extends React.Component {
             提交
           </Button>
         </Form>
+        <OfficialAccount onLoad={this.onLoad} onError={this.onError} />
       </View>
     )
   }
