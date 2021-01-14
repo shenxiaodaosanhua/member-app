@@ -9,10 +9,15 @@ export default class Index extends React.Component {
 
   state = {
     code: '',
+    userId: 0,
   }
 
   componentDidMount () {
     this.getCode()
+    let shareId = Taro.getStorageSync('user_id')
+    this.setState({
+      userId:shareId
+    })
   }
 
   getCode() {
@@ -41,7 +46,8 @@ export default class Index extends React.Component {
     let data = {
       encryptedData: result.detail.encryptedData,
       iv: result.detail.iv,
-      code: this.state.code
+      code: this.state.code,
+      userId: this.state.userId
     }
 
     Taro.showLoading({

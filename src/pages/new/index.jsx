@@ -52,11 +52,11 @@ export default class Index extends React.Component {
   }
 
   onLoad = result => {
-    console.log(result)
+    // console.log(result)
   }
 
   onError = result => {
-    console.log(result)
+    // console.log(result)
   }
 
   render() {
