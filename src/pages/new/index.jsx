@@ -5,7 +5,7 @@ import './index.less'
 import {createWork} from "../../servers/servers";
 import {getCurrentInstance} from "@tarojs/runtime";
 
-export default class Index extends React.Component {
+export default class Index extends Component {
 
   state = {
     isSubmit: false,
@@ -52,11 +52,11 @@ export default class Index extends React.Component {
   }
 
   onLoad = result => {
-    // console.log(result)
+    console.log(result)
   }
 
   onError = result => {
-    // console.log(result)
+    console.log(result)
   }
 
   render() {
