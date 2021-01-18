@@ -47,3 +47,8 @@ export const createWork = data => {
 export const getMy = () => {
   return httpRequest.get('/member')
 }
+
+//更新我的信息
+export const updateMyInfo = (data) => {
+  return httpRequest.put('/member-wechat', data)
+}

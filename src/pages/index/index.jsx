@@ -16,7 +16,7 @@ import {getMy} from "../../servers/servers";
 export default class Index extends Component {
 
   state = {
-    user: null,
+    user: {},
   }
 
   componentDidMount () {
@@ -77,8 +77,7 @@ export default class Index extends Component {
   }
 
   render () {
-    let userInfo = Taro.getStorageSync('userInfo'),
-      token = Taro.getStorageSync('Authorization'),
+    let token = Taro.getStorageSync('Authorization'),
       loginButton = null
 
     if (! token) {
@@ -105,7 +104,7 @@ export default class Index extends Component {
             className='at-col-2'
           >
             <AtAvatar
-              image={userInfo.avatarUrl}
+              image={this.state.user.avatar}
               circle
               size='large'
             />

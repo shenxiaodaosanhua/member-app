@@ -15,6 +15,10 @@ export default class Index extends React.Component {
   componentDidMount () {
     this.getCode()
     let shareId = Taro.getStorageSync('user_id')
+    if (! shareId) {
+      shareId = 0
+    }
+
     this.setState({
       userId:shareId
     })
@@ -56,8 +60,8 @@ export default class Index extends React.Component {
     loginWechat(data).then(res => {
       Taro.setStorageSync('Authorization', res.data.token)
       Taro.hideLoading()
-      Taro.redirectTo({
-        url: '/pages/index/index',
+      Taro.navigateTo({
+        url: '/pages/auth/avatar',
       })
     }).catch(error => {
       this.getCode()

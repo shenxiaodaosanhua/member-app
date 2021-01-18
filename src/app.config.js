@@ -9,6 +9,7 @@ export default {
     'pages/info/index',
     'pages/auth/mobile',
     'pages/auth/index',
+    'pages/auth/avatar',
   ],
   window: {
     backgroundTextStyle: 'light',
