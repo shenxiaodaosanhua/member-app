@@ -3,6 +3,7 @@ import Taro from "@tarojs/taro"
 import {Button, Form, Input, View} from "@tarojs/components";
 import './mobile.less'
 import {loginCode, sendMobileCode} from "../../servers/servers";
+import {getCurrentPageUrl} from '../../servers/utils'
 
 
 export default class Mobile extends React.Component {
@@ -45,14 +46,22 @@ export default class Mobile extends React.Component {
     let data = {
       mobile: result.detail.value.mobile,
       code: result.detail.value.code,
-    }
+    },
+      path = Taro.getStorageSync('path')
 
     loginCode(data).then(res => {
       Taro.setStorageSync('Authorization', res.data.token)
       Taro.hideLoading()
-      Taro.redirectTo({
-        url: '/pages/index/index',
-      })
+      if (path) {
+        Taro.redirectTo({
+          url: '/' + path,
+        })
+      } else {
+        Taro.redirectTo({
+          url: '/pages/index/index',
+        })
+      }
+
     }).catch(error => {
       Taro.hideLoading()
       Taro.showToast({

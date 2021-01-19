@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro';
 import {Button, Form, Input, OfficialAccount, Text, Textarea, View} from "@tarojs/components";
 import './index.less'
 import {createWork} from "../../servers/servers";
+import {getCurrentPageUrl} from '../../servers/utils'
 import {getCurrentInstance} from "@tarojs/runtime";
 
 export default class Index extends Component {
@@ -12,9 +13,19 @@ export default class Index extends Component {
   }
 
   componentDidMount () {
-    let params = getCurrentInstance().router.params
+    let params = getCurrentInstance().router.params,
+      auth = Taro.getStorageSync('Authorization')
+
     if ((params.user_id) && (params.user_id > 0)) {
       Taro.setStorageSync('user_id', params.user_id);
+    }
+
+    if (! auth) {
+      let path = getCurrentPageUrl()
+      Taro.setStorageSync('path', path)
+      Taro.navigateTo({
+        url: '/pages/auth/index'
+      })
     }
   }
 
