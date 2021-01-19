@@ -58,7 +58,7 @@ export default class Index extends Component {
 
   loginOut = () => {
     Taro.setStorageSync('Authorization', '')
-    // Taro.setStorageSync('userInfo', '')
+    Taro.setStorageSync('userInfo', '')
     Taro.redirectTo({
       url: '/pages/auth/index'
     })
