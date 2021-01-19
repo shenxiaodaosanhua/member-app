@@ -3,7 +3,6 @@ import Taro from "@tarojs/taro"
 import {Button, Form, Input, View} from "@tarojs/components";
 import './mobile.less'
 import {loginCode, sendMobileCode} from "../../servers/servers";
-import {getCurrentPageUrl} from '../../servers/utils'
 
 
 export default class Mobile extends React.Component {

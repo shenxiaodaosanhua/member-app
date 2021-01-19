@@ -17,7 +17,7 @@ export default class Index extends Component {
       auth = Taro.getStorageSync('Authorization')
 
     if ((params.user_id) && (params.user_id > 0)) {
-      Taro.setStorageSync('user_id', params.user_id);
+      Taro.setStorageSync('new_params', params);
     }
 
     if (! auth) {
@@ -34,31 +34,24 @@ export default class Index extends Component {
       title: '提交中...'
     })
 
-    let userId = getCurrentInstance().router.params.user_id
-    if (! userId) {
-      userId = Taro.getStorageSync('user_id')
-    }
 
+    let params = Taro.getStorageSync('new_params')
     let data = {
       name: form.detail.value.name,
       mobile: form.detail.value.mobile,
       remark: form.detail.value.remark,
       category: 'new',
-      'user_id': userId,
+      'user_id': params.user_id,
+      'product_id': params.product_id,
     }
 
     createWork(data).then(() => {
+      Taro.hideLoading()
       Taro.redirectTo({
         url: '/pages/index/index',
       })
-      Taro.hideLoading()
-    }).then(error => {
-      Taro.hideLoading()
-      Taro.showToast({
-        title: error.data.message,
-        icon: 'none',
-        duration: 3000,
-      })
+    }).catch(error => {
+      console.log(error)
     })
   }
 

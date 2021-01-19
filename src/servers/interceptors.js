@@ -28,14 +28,15 @@ const customInterceptor = (chain) => {
 
     } else if (res.statusCode === HTTP_STATUS.TOO_MANY) {
       return Promise.reject("请求过于频繁")
-    } else if (
-      (res.statusCode === HTTP_STATUS.SUCCESS) ||
-      (res.statusCode === HTTP_STATUS.CREATED) ||
-      (res.statusCode === HTTP_STATUS.ACCEPTED)) {
+    } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
       return res.data
-    } else {
-      return Promise.reject(res)
-    }
+    } else if ((res.statusCode === HTTP_STATUS.CREATED)) {
+      return res.data
+    } else if (res.statusCode === HTTP_STATUS.ACCEPTED) {
+      return res.data
+    }else {
+        return Promise.reject(res)
+      }
   })
 }
 
