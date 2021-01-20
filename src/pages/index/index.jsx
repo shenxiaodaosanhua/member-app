@@ -5,25 +5,36 @@ import {
   View,
 } from '@tarojs/components'
 import {
-  AtAvatar,
-  AtDivider,
-  AtList,
-  AtListItem,
+  AtModal,
+  AtModalContent,
+  AtModalAction
 } from 'taro-ui'
 import './index.less'
-import {getMy} from "../../servers/servers";
+import {getMy, updateMyInfo} from "../../servers/servers";
+import Header from '../../components/index/header'
+import Action from '../../components/index/action'
+import Setting from '../../components/index/setting'
 
 export default class Index extends Component {
 
   state = {
     user: {},
+    isOpened: false,
   }
 
   componentDidMount () {
     getMy().then(result => {
-      this.setState({
-        user: result.data
-      })
+      if (result.data.avatar == '') {
+        this.setState({
+          user: result.data,
+          isOpened: true,
+        })
+      } else {
+        this.setState({
+          user: result.data,
+        })
+      }
+
     }).catch(error => {
       Taro.showToast({
         title: error.data.message,
@@ -33,137 +44,57 @@ export default class Index extends Component {
     })
   }
 
-  onGetUserInfo = result => {
-    if (result.detail.errMsg !== 'getUserInfo:ok') {
-      Taro.showToast({
-        title: '请先授权',
-        icon: 'none',
-        duration: 3000,
-      })
-      return
-    }
+  handleClose() {
+    this.setState({
+      isOpened: false,
+    })
+  }
 
+  getUserInfo(result) {
     let userInfo = result.detail.userInfo
-    Taro.setStorageSync('userInfo', userInfo)
-    Taro.navigateTo({
-      url: '/pages/auth/index'
+    Taro.showLoading({
+      title: '更新中...'
     })
-  }
-
-  selectWork = () => {
-    Taro.navigateTo({
-      url: '/pages/works/index'
-    })
-  }
-
-  loginOut = () => {
-    Taro.setStorageSync('Authorization', '')
-    Taro.setStorageSync('userInfo', '')
-    Taro.redirectTo({
-      url: '/pages/auth/index'
-    })
-  }
-
-  workAdd = () => {
-    Taro.navigateTo({
-      url: '/pages/new/index'
-    })
-  }
-
-  workFault = () => {
-    Taro.navigateTo({
-      url: '/pages/fault/index'
+    updateMyInfo(userInfo).then(() => {
+      Taro.hideLoading()
+      Taro.redirectTo({
+        url: '/pages/index/index',
+      })
+    }).catch(() => {
+      Taro.hideLoading()
+      Taro.redirectTo({
+        url: '/pages/index/index',
+      })
     })
   }
 
   render () {
-    let token = Taro.getStorageSync('Authorization'),
-      loginButton = null
 
-    if (! token) {
-      loginButton = (
-        <View className='at-row at-row__justify--center login-not'>
-          <View
-            className='at-col-5'
-          >
-            <Button
-              className='login-not-button'
-              openType='getUserInfo'
-              onGetUserInfo={this.onGetUserInfo}
-              lang='zh_CN'
-            >未登录</Button>
-          </View>
-        </View>
-      )
-    }
 
     return (
       <View>
-        <View className='at-row at-row__justify--center'>
-          <View
-            className='at-col-2'
-          >
-            <AtAvatar
-              image={this.state.user.avatar}
-              circle
-              size='large'
-            />
-          </View>
-        </View>
+        <Header user={this.state.user} />
 
-        {loginButton}
+        <Action />
 
-        <AtDivider
-          content='操作'
-          lineColor='#cccccc'
-          fontColor='#cccccc'
-        />
-        <AtList>
-          <AtListItem
-            title='查询进度'
-            arrow='right'
-            iconInfo={{ color: '#13CE66', value: 'eye', }}
-            onClick={this.selectWork}
-          />
-          <AtListItem
-            title='宽带报装'
-            arrow='right'
-            iconInfo={{ color: '#13CE66', value: 'add-circle', }}
-            onClick={this.workAdd}
-          />
-          <AtListItem
-            title='故障申报'
-            arrow='right'
-            iconInfo={{ color: '#FFC82C', value: 'close-circle', }}
-            onClick={this.workFault}
-          />
-        </AtList>
-        <AtDivider
-          content='个人设置'
-          lineColor='#cccccc'
-          fontColor='#cccccc'
-        />
-        {
-          this.state.user && this.state.user.is_bind ? (
-            <AtListItem
-              title='绑定小程序'
-              extraText='已绑定'
-              iconInfo={{ color: '#13CE66', value: 'message', }}
-            />
-          ) : (
-            <AtListItem
-              title='绑定小程序'
-              arrow='right'
-              iconInfo={{ color: '#13CE66', value: 'message', }}
-            />
-          )
-        }
-        <AtListItem
-          title='退出'
-          arrow='right'
-          iconInfo={{ color: '#FFC82C', value: 'trash', }}
-          onClick={this.loginOut.bind(this)}
-        />
+        <Setting user={this.state.user} />
+
+        <AtModal isOpened={this.state.isOpened}>
+          <AtModalContent>
+            <Button
+              type='primary'
+              size='default'
+              openType='getUserInfo'
+              onGetUserInfo={this.getUserInfo}
+            >更新我的个人信息</Button>
+          </AtModalContent>
+          <AtModalAction>
+            <Button
+              onClick={this.handleClose.bind(this)}
+            >取消</Button>
+          </AtModalAction>
+        </AtModal>
+
       </View>
     )
   }

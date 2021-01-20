@@ -58,7 +58,7 @@ export default class Index extends React.Component {
         })
       } else {
         Taro.redirectTo({
-          url: '/pages/auth/avatar',
+          url: '/pages/index/index',
         })
       }
     }).catch(error => {
