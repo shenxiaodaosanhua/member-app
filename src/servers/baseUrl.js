@@ -5,7 +5,7 @@ const getBaseUrl = () => {
     // BASE_URL = 'https://crm.ipicture.vip/api'
     BASE_URL = 'http://crm.test/api'
   } else {
-    BASE_URL = 'https://admin.huanheng.vip/api'
+    BASE_URL = 'https://crm.ipicture.vip/api'
   }
   return BASE_URL
 }

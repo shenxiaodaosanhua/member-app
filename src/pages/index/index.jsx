@@ -23,25 +23,29 @@ export default class Index extends Component {
   }
 
   componentDidMount () {
-    getMy().then(result => {
-      if (result.data.avatar == '') {
-        this.setState({
-          user: result.data,
-          isOpened: true,
-        })
-      } else {
-        this.setState({
-          user: result.data,
-        })
-      }
+    let auth = Taro.getStorageSync('Authorization')
+    if (auth) {
+      getMy().then(result => {
+        if (result.data.avatar == '') {
+          this.setState({
+            user: result.data,
+            isOpened: true,
+          })
+        } else {
+          this.setState({
+            user: result.data,
+          })
+        }
 
-    }).catch(error => {
-      Taro.showToast({
-        title: error.data.message,
-        icon: 'none',
-        duration: 3000,
+      }).catch(error => {
+        Taro.showToast({
+          title: error.data.message,
+          icon: 'none',
+          duration: 3000,
+        })
       })
-    })
+    }
+
   }
 
   handleClose() {
