@@ -47,6 +47,7 @@ export default class Index extends Component {
 
     createWork(data).then(() => {
       Taro.setStorageSync('path', '')
+      Taro.setStorageSync('new_params', '')
       Taro.hideLoading()
       Taro.redirectTo({
         url: '/pages/index/index',

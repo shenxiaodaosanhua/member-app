@@ -14,6 +14,12 @@ export default class Index extends React.Component {
 
   componentDidMount () {
     this.getCode()
+    let params = Taro.getStorageSync('new_params')
+    if (params.user_id && params.user_id > 0) {
+      this.setState({
+        userId: params.user_id,
+      })
+    }
   }
 
   getCode() {
@@ -43,6 +49,7 @@ export default class Index extends React.Component {
       encryptedData: result.detail.encryptedData,
       iv: result.detail.iv,
       code: this.state.code,
+      "user_id": this.state.userId,
     },
       path = Taro.getStorageSync('path')
 

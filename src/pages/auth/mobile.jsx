@@ -12,6 +12,16 @@ export default class Mobile extends React.Component {
     codeButtonText: '获取验证码',
     wait: 59,
     mobile: '',
+    userId: 0,
+  }
+
+  componentDidMount() {
+    let params = Taro.getStorageSync('new_params')
+    if (params.user_id && params.user_id > 0) {
+      this.setState({
+        userId: params.user_id,
+      })
+    }
   }
 
   /**
@@ -44,6 +54,7 @@ export default class Mobile extends React.Component {
     })
     let data = {
       mobile: result.detail.value.mobile,
+      "user_id": this.state.userId,
       code: result.detail.value.code,
     },
       path = Taro.getStorageSync('path')
