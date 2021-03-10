@@ -3,30 +3,24 @@ import Taro from '@tarojs/taro';
 import {Button, Form, Input, OfficialAccount, Text, Textarea, View} from "@tarojs/components";
 import './index.less'
 import {createWork} from "../../servers/servers";
-import {getCurrentPageUrl} from '../../servers/utils'
 import {getCurrentInstance} from "@tarojs/runtime";
 
 export default class Index extends Component {
 
   state = {
     isSubmit: false,
+    product_id: 0,
   }
 
   componentDidMount () {
-    let params = getCurrentInstance().router.params,
-      auth = Taro.getStorageSync('Authorization')
+    let params = getCurrentInstance().router.params
 
-    if ((params.user_id) && (params.user_id > 0)) {
-      Taro.setStorageSync('new_params', params);
-    }
-
-    if (! auth) {
-      let path = getCurrentPageUrl()
-      Taro.setStorageSync('path', path)
-      Taro.navigateTo({
-        url: '/pages/auth/index'
+    if ((params.product_id) && (params.product_id > 0)) {
+      this.setState({
+        product_id: params.product_id,
       })
     }
+
   }
 
   onSubmit = form => {
@@ -42,7 +36,7 @@ export default class Index extends Component {
       remark: form.detail.value.remark,
       category: 'new',
       'user_id': params.user_id,
-      'product_id': params.product_id,
+      'product_id': this.state.product_id,
     }
 
     createWork(data).then(() => {

@@ -52,3 +52,8 @@ export const getMy = () => {
 export const updateMyInfo = (data) => {
   return httpRequest.put('/member-wechat', data)
 }
+
+//分享商品列表
+export const getProduct = () => {
+  return httpRequest.get('/product')
+}
