@@ -2,7 +2,6 @@ import { useGlobalIconFont } from './components/iconfont/helper'
 
 export default {
   pages: [
-    'pages/product/list',
     'pages/index/index',
     'pages/new/index',
     'pages/fault/index',
@@ -11,6 +10,7 @@ export default {
     'pages/auth/mobile',
     'pages/auth/index',
     'pages/auth/avatar',
+    'pages/product/list',
   ],
   window: {
     backgroundTextStyle: 'light',
