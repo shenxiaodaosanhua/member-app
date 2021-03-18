@@ -89,7 +89,7 @@ export default class Index extends Component {
             <Input
               name='address'
               placeholder='请输入您的地址'
-              type='number'
+              type='text'
               className='input at-col-8'
             />
           </View>
