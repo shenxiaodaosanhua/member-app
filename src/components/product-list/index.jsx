@@ -24,7 +24,7 @@ export default class ProductList extends Component {
   render() {
     let product = this.props.product
     return (
-      <View className='at-col at-col-6 product-item'>
+      <View className='at-col at-col-12 product-item'>
         <AtCard
           extra={product.brand}
           title={product.name}
@@ -36,8 +36,7 @@ export default class ProductList extends Component {
               aspectFit='aspectFit'
             />
           </View>
-          <View className='text-view'>价格：<Text className='text'>{product.price}</Text></View>
-          <View className='text-view'>分润金额:<Text className='text'>{product.share_price}</Text></View>
+          <View className='text-view'>资费：<Text className='text'>{product.price}</Text></View>
           <AtButton
             type='primary'
             size='small'
