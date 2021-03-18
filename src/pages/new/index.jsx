@@ -34,6 +34,7 @@ export default class Index extends Component {
       name: form.detail.value.name,
       mobile: form.detail.value.mobile,
       remark: form.detail.value.remark,
+      address: form.detail.value.address,
       category: 'new',
       'user_id': params.user_id,
       'product_id': this.state.product_id,
@@ -79,6 +80,15 @@ export default class Index extends Component {
             <Input
               name='mobile'
               placeholder='请输入您的联系电话'
+              type='number'
+              className='input at-col-8'
+            />
+          </View>
+          <View className='at-row input-block'>
+            <Text className='at-col-3 input-text'>联系地址：</Text>
+            <Input
+              name='address'
+              placeholder='请输入您的地址'
               type='number'
               className='input at-col-8'
             />
