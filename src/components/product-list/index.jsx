@@ -3,7 +3,6 @@ import Taro from '@tarojs/taro'
 import {
   View,
   Image,
-  Text,
 } from '@tarojs/components'
 import {
   AtCard,
@@ -32,16 +31,15 @@ export default class ProductList extends Component {
           <View className='at-row at-row__justify--center'>
             <Image
               src={product.image}
-              className='product-image'
+              className='at-article__img'
               aspectFit='aspectFit'
             />
           </View>
-          <View className='text-view'>资费：<Text className='text'>{product.price}</Text></View>
           <AtButton
             type='primary'
             size='small'
             onClick={this.productInfo.bind(this, product.id)}
-          >选择产品</AtButton>
+          >登记报装</AtButton>
         </AtCard>
       </View>
     )
