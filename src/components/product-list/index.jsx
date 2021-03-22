@@ -36,8 +36,9 @@ export default class ProductList extends Component {
             />
           </View>
           <AtButton
-            type='primary'
+            type='warn'
             size='small'
+            className='btn'
             onClick={this.productInfo.bind(this, product.id)}
           >登记报装</AtButton>
         </AtCard>
