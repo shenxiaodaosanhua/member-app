@@ -33,6 +33,7 @@ export default class ProductList extends Component {
               src={product.image}
               className='at-article__img'
               aspectFit='aspectFit'
+              onClick={this.productInfo.bind(this, product.id)}
             />
           </View>
           <AtButton
