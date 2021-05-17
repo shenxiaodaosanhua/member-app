@@ -11,6 +11,7 @@ export default {
     'pages/auth/index',
     'pages/auth/avatar',
     'pages/product/list',
+    'pages/renew/index',
   ],
   window: {
     backgroundTextStyle: 'light',

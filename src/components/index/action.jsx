@@ -29,6 +29,12 @@ export default class Action extends Component {
     })
   }
 
+  workRenew = () => {
+    Taro.navigateTo({
+      url: '/pages/renew/index'
+    })
+  }
+
   render() {
     return (
       <View>
@@ -49,6 +55,12 @@ export default class Action extends Component {
             arrow='right'
             iconInfo={{ color: '#13CE66', value: 'add-circle', }}
             onClick={this.workAdd}
+          />
+          <AtListItem
+            title='宽带续费'
+            arrow='right'
+            iconInfo={{ color: '#13CE66', value: 'add-circle', }}
+            onClick={this.workRenew}
           />
           <AtListItem
             title='故障申报'
